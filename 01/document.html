@@ -1,0 +1,28 @@
+<html>
+<script type="text/javascript">
+function borraElemento(evt) {
+    var listado=document.getElementById("listado");
+    listado.removeChild(evt.target); // también sirve evt.srcElement y this
+}
+function agregatexto() {
+    var texto=document.getElementById("texto");
+    var listado=document.getElementById("listado");
+    
+    var li=document.createElement("li");
+    li.innerHTML=texto.value;
+    li.onclick=borraElemento;
+
+    listado.appendChild(li);
+
+    texto.value="";
+}
+</script>
+<body>
+    <input type="text" id="texto" name="texto"/> 
+    
+    <button onclick="agregatexto()">agregar</button>
+    
+    <ul id="listado">
+    </ul>
+</body>
+</html>

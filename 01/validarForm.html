@@ -1,0 +1,36 @@
+<html>
+<script type="text/javascript">
+function validaF1() {
+    var nombre=document.forms.form1.nombre.value;
+    var nombre_msg=document.getElementById("nombre_msg");
+    var email=document.forms.form1.email.value;
+    
+    var regn=/^[a-z]+(\s[a-z]+)*$/gi;
+    if(!regn.test(nombre)) {
+        nombre_msg.innerHTML="**nombre invalido**";
+        return false;
+    }
+    else
+        nombre_msg.innerHTML="";
+
+    var rege=/^[\w_\.]+@[\w-_]+(\.[\w-_]+)+$/gi;
+    if(!rege.test(email)) {
+        alert("email invalido");
+        return false;
+    }
+}
+</script>
+<body>
+    <form id="form1" onsubmit="return validaF1()">
+      <label for="nombre">Nombre:</label>
+      <input type="text" name="nombre" id="nombre"/>
+      <span id="nombre_msg"></span>
+      <br/>
+      <label for="email">Email:</label>
+      <input type="text" name="email" id="email"/>
+
+      <input type="submit" name="submit" value="enviar"/>
+
+    </form>
+</body>
+</html>
