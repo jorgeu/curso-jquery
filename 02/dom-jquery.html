@@ -1,0 +1,30 @@
+<html>
+<script type="text/javascript" src="jquery/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#btn').click(function() {
+    var texto=$("#texto");
+    $("#listado").append(
+       $('<li></li>').text(texto.val())
+         .click(function() { $(this).remove(); })
+    );
+    texto.val('');
+    var valores="";
+    $.each($("#listado li"), function(idx,linode){
+        valores+=$(linode).text()+",";
+    });
+    $("#valores").val(valores);
+  });
+});
+</script>
+<body>
+    <input type="text" id="texto" name="texto"/> 
+    
+    <button id="btn">agregar</button>
+    
+    <ul id="listado">
+    </ul>
+    
+    <input type="hidden" name="valores" id="valores"/>
+</body>
+</html>

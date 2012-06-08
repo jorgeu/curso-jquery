@@ -15,6 +15,14 @@ function agregatexto() {
     listado.appendChild(li);
 
     texto.value="";
+    
+    var lis=listado.getElementsByTagName("li");
+    var valores="";
+    for(var i=0;i<lis.length;i++) {
+        var li=lis[i];
+        valores+=li.innerHTML+",";
+    }
+    document.getElementById("valores").value=valores;
 }
 </script>
 <body>
@@ -24,5 +32,20 @@ function agregatexto() {
     
     <ul id="listado">
     </ul>
+    
+    <input type="hidden" name="valores" id="valores"/>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
