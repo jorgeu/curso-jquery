@@ -1,0 +1,56 @@
+<html>
+<head>
+<style>
+.redclass { color: red; }
+.blueclass { color: blue; }
+.greenclass { color: green; }
+.yellowclass { color: yellow; }
+.cyanclass { color: cyan; }
+.magentaclass { color: magenta; }
+.grayclass { color: gray; }
+.blackclass { color: black; }
+</style>
+<script type="text/javascript" src="jquery/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+var currentclass="blackclass";
+function cargar() {
+    $("#cont").html('');
+    var textarr=$("#texto").val().split(/\b/);
+    $.each(textarr,function(idx,text) {
+        $("#cont").append(
+            $("<span></span>").text(text).click(function() {
+                $(this).removeClass();
+                $(this).addClass(currentclass);
+            })
+        );
+    });
+}
+</script>
+</head>
+<body>
+
+<h1>Resaltador de texto</h1>
+
+<hr/>
+
+<div id="cont">
+</div>
+
+<hr/>
+
+<textarea id="texto"></textarea>
+<button onclick="cargar()">cargar</button>
+
+<hr/>
+
+<button onclick="currentclass='blackclass'">black</button>
+<button onclick="currentclass='grayclass'">gray</button>
+<button onclick="currentclass='magentaclass'">magenta</button>
+<button onclick="currentclass='cyanclass'">cyan</button>
+<button onclick="currentclass='yellowclass'">yellow</button>
+<button onclick="currentclass='greenclass'">green</button>
+<button onclick="currentclass='blueclass'">blue</button>
+<button onclick="currentclass='redclass'">red</button>
+
+</body>
+</html>
