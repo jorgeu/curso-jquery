@@ -1,0 +1,38 @@
+<html>
+<script type="text/javascript" src="jquery/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+var imgs=["img/sky.jpg","img/soccerball.png","img/grapes.jpg","img/yellow-rose.jpg",
+"img/lightning.jpg","img/fish.jpg","img/coffee.jpg","img/guitar.jpg",
+"img/flake.jpg","img/flower.jpg","img/tennis-ball.png","img/sunset.jpg",
+"img/energy-arc.jpg","img/sunflower.jpg","img/astronaut.jpg","img/cat-eye.jpg",
+"img/butterfly.png","img/leaf.jpg","img/dice.jpg","img/launch.jpg","img/chess.jpg",
+"img/penguin.jpg","img/puppy.jpg","img/baseball.png"];
+
+var imgidx=1;
+
+$(document).ready(function() {
+    setInterval(function() {
+    $("#imgs img").fadeOut(1000,function() {
+        $("#imgs img").attr('src',imgs[imgidx]);
+        $("#imgs img").fadeIn(1000);
+        imgidx=(imgidx+1) % imgs.length;
+    });
+    },4000);
+});
+
+</script>
+<body>
+
+<button onclick="$('#parrafo').fadeIn()">mostrar parrafo</button>
+<div id="parrafo" onclick="$('#parrafo').fadeOut()">
+<p>"At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat</p>
+</div>
+
+<hr/>
+
+<div id="imgs">
+    <img src="img/sky.jpg"/>
+</div>
+
+</body>
+</html>
