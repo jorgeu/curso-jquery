@@ -1,0 +1,145 @@
+<html>
+<head>
+<title>Consulta</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script type="text/javascript" src="jquery/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+function consultar() {
+    var q=$("#q").val();
+    var datos={};
+    if(q.replace(/^\s+|\s+$/g,"").length>0) {
+        if($("input[name='buscapor']:checked").attr('id')=='pornombre')
+            datos = {'nombre' : q};
+        else
+            datos = {'direccion' : q};
+    }
+    
+    $.ajax('consulta.php',{
+        data: datos,
+        dataType: 'json',
+        type: 'GET',
+        success: function(arr) {
+            muestraDatos(arr);
+        }
+    });
+}
+function muestraDatos(arr) {
+    $("#resultados tbody tr").remove();
+    $.each(arr,function(idx,p) {
+        $("#resultados tbody").append(
+            $("<tr></tr>").attr("id","tr"+p.cedula)
+               .append($("<td></td>").text(p.cedula))
+               .append($("<td></td>").text(p.nombre))
+               .append($("<td></td>").text(p.direccion))
+               .append($("<td></td>").append($("<button>Borrar</button>")
+                                             .attr("cedula",p.cedula)
+                                             .click(borraRegistro)))               
+        );
+    });
+}
+function borraRegistro() {
+    var cedula=$(this).attr("cedula");
+    var cedulaData={'cedula':cedula};
+    $.ajax('borra.php',{
+        data: cedulaData,
+        type: 'POST',
+        success: function() {
+            $("tr#tr"+cedula).remove();
+        }
+    });
+}
+function nuevoRegistro() {
+    var datos = {
+        'cedula'    : $("#cedula").val(),
+        'nombre'    : $("#nombre").val(),
+        'direccion' : $("#direccion").val()
+    };
+    $.ajax('nuevo.php',{
+        data : datos,
+        type : 'POST',
+        success : function() {
+            $("#divNuevo input").val('');
+            consultar();
+        },
+        error : function()  {
+            alert("error ingresando datos");
+        }
+    });
+}
+$(document).ready(function() {
+    $("#q").keypress(consultar);
+    $("#btnNuevo").click(nuevoRegistro);
+});
+</script>
+<style>
+h1 {
+    width: 100%;
+    text-align: center;
+}
+#divNuevo {
+    margin-left: auto;
+    margin-right: auto;
+    width: 15em;
+}
+#divNuevo label {
+    display: block;
+    float:left;
+    width: 5em;
+    text-align: right;
+    margin-right: 0.5em;
+}
+#divNuevo input {
+    width: 10em;
+}
+#btnNuevo {
+    width: 100%;
+}
+#consulta {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+}
+#q, #resultados {
+    width: 100%;
+}
+td,th {
+    border-width: 1px;
+    border-style: solid;
+}
+</style>
+</head>
+<body>
+
+<div id="divNuevo">
+<h1>Nuevo registro</h1>
+<label for="cedula">Cédula</label>
+<input id="cedula" type="text" name="cedula"/><br/>
+<label for="nombre">Nombre</label>
+<input id="nombre" type="text" name="nombre"/><br/>
+<label for="direccion">Dirección</label>
+<input id="direccion" type="text" name="direccion"/><br/>
+<button id="btnNuevo">Nuevo</button>
+</div>
+
+<hr/>
+
+<div id="consulta">
+<h1>Consulta</h1>
+Buscar por:<br/>
+<input type='radio' checked="true" id='pornombre' name="buscapor" value="nombre"/>Nombre<br/>
+<input type='radio' id='pordireccion' name="buscapor" value="direccion"/>Dirección<br/>
+<input type='text' id='q' autocomplete="off"/><br/><br/>
+<table id="resultados">
+<thead>
+<tr>
+<th>Cédula</th><th>Nombre</th><th>Dirección</th><th>Acción</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</div>
+
+
+</body>
+</html>
