@@ -1,0 +1,76 @@
+<html>
+<head>
+<script type="text/javascript" src="jquery/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+var images=['img2/1.png','img2/2.png','img2/3.png','img2/4.png','img2/5.png'];
+function cargaImgs() {
+  $.each(images, function(idx,img) {
+    $("#ver").append(
+      $("<img></img>").addClass("oculto")
+                      .attr('src',img)
+                      .attr('id','img'+idx)
+    );
+  });
+}
+var actual;
+function siguiente() {
+    ocultaImg(function() {
+        actual=(actual+1) % images.length;
+        cargaImg();
+    });
+}
+function anterior() {
+    ocultaImg(function() {
+        actual=(actual>0) ? actual-1 : images.length-1;
+        cargaImg();
+    });
+}
+function cargaImg() {
+    $('#img'+actual).slideDown(2000);
+}
+
+function ocultaImg(fnc) {
+    $('#img'+actual).fadeOut(1000,fnc);
+}
+$(document).ready(function() {
+    cargaImgs();
+    $("#btnA").click(anterior);
+    $("#btnS").click(siguiente);
+    actual=0;
+    $('#img'+actual).show();
+});
+</script>
+<style>
+#btnA {
+    position: absolute;
+    top: 270px;
+    left: 2%;
+}
+#btnS {
+    position: absolute;
+    top: 270px;
+    right: 2%;
+}
+#ver {
+    width: 640px;
+    height: 480px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 40px;
+    text-align: center;
+}
+.oculto {
+    display: none;
+}
+</style>
+</head>
+<body>
+
+<button id='btnA'>anterior</button>
+
+<div id="ver"></div>
+
+<button id='btnS'>siguiente</button>
+
+</body>
+</html>
