@@ -1,0 +1,201 @@
+<html>
+<head>
+<title>Consulta</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script type="text/javascript" src="jquery-ui/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="jquery-ui/js/jquery-ui-1.8.21.custom.min.js"></script>
+<link rel="stylesheet" type="text/css" href="jquery-ui/css/humanity/jquery-ui-1.8.21.custom.css" />
+<script type="text/javascript">
+function consultar() {
+    var q=$("#q").val();
+    var datos={'nombre' : q};
+    
+    $.ajax('consulta.php',{
+        data: datos,
+        dataType: 'json',
+        type: 'GET',
+        success: function(arr) {
+            muestraDatos(arr);
+        }
+    });
+}
+function muestraDatos(arr) {
+    $("#resultados tbody tr").remove();
+    $.each(arr,function(idx,p) {
+        $("#resultados tbody").append(
+            $("<tr></tr>").attr("id","tr"+p.cedula)               
+               .append($("<td></td>").addClass("td-center")
+                                     .append($("<input></input>")
+                                             .attr("type","checkbox")
+                                             .addClass("grancheckbox")
+                                             .attr("name","checkp")
+                                             .attr("value",p.cedula)))
+               .append($("<td></td>").text(p.cedula))
+               .append($("<td></td>").text(p.nombre))
+               .append($("<td></td>").text(p.direccion))
+                                                                                    
+        );
+    });
+}
+function borraRegistro() {
+    var cedulas=$("input[type='checkbox']:checked")
+                     .map(function() { 
+                             return $(this).val() 
+                     });
+    if(cedulas.length>0) {
+        var progress=$("<div></div>").progressbar();
+        var dialog=$("<div></div>")
+                      .append(progress)
+                      .dialog({modal:true,width:300,title:'Borrando...'});
+        var borrados=0;
+        $.each(cedulas, function(idx, cedula) {
+            var cedulaData={'cedula':cedula};
+            $.ajax('borra.php',{
+                data: cedulaData,
+                type: 'POST',
+                success: function() {
+                    $("tr#tr"+cedula).remove();
+                    progress.progressbar('value',100*((++borrados)/cedulas.length));
+                    if((idx+1)==cedulas.length)
+                        setTimeout(function(){$(dialog).dialog('close');},600)
+                }
+            });
+        });
+    }
+}
+function nuevoRegistro() {
+    var datos = {
+        'cedula'    : $("#cedula").val(),
+        'nombre'    : $("#nombre").val(),
+        'direccion' : $("#direccion").val()
+    };
+    $.ajax('nuevo.php',{
+        data : datos,
+        type : 'POST',
+        success : function() {
+            $("#divNuevo input").val('');
+            $('#divNuevo').dialog('close');
+            consultar();
+        },
+        error : function()  {
+            alert("error ingresando datos");
+        }
+    });
+}
+$(document).ready(function() {
+    $("#q").keypress(function(event) {
+        if ( event.which == 13 ) {
+            event.preventDefault();
+            $("#q").autocomplete('close');
+            consultar();
+        }
+    });
+    $("#btnNuevo").click(nuevoRegistro);
+    $('#divNuevo').dialog({
+        autoOpen: false,
+        width: '400',
+        title: 'Nuevo registro',
+        modal: true,
+        buttons: {
+              "Nuevo" : nuevoRegistro,
+              "Cancelar" : function() { $(this).dialog('close'); }
+           }
+    });
+    $("#agrBtn").button().click(function(){
+        $('#divNuevo').dialog('open');
+    });
+    $("#delBtn").button().click(borraRegistro);
+    $("#q").autocomplete({
+        source: "autocomplete.php",
+        select: consultar
+    });
+    $("#checkAll").change(function(){
+         $("#resultados input[type='checkbox']").attr('checked', this.checked);
+    });
+    consultar();
+});
+</script>
+<style>
+body, input {
+    font-family: Verdana,Arial,sans-serif;
+    font-size: 1.1em;
+}
+.td-center {
+    text-align: center;
+}
+.ui-button-text-only .ui-button-text {
+    padding: 5px 10px;
+    font-size: 0.8em;
+}
+h1 {
+    width: 100%;
+    text-align: center;
+}
+#divNuevo {
+    margin-left: auto;
+    margin-right: auto;
+    width: 400px;
+    display: none;
+    text-align: center;
+}
+#divNuevo label {
+    display: block;
+    float:left;
+    width: 100px;
+    text-align: right;
+    margin-right: 20px;
+}
+#divNuevo input {
+    width: 200px;
+}
+#btnNuevo {
+    width: 100%;
+}
+#consulta {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+}
+#q, #resultados {
+    width: 100%;
+}
+td,th {
+    border-width: 1px;
+    border-style: solid;
+}
+</style>
+</head>
+<body>
+
+<div id="divNuevo">
+<label for="cedula">Cédula</label>
+<input id="cedula" type="text" name="cedula"/><br/>
+<label for="nombre">Nombre</label>
+<input id="nombre" type="text" name="nombre"/><br/>
+<label for="direccion">Dirección</label>
+<input id="direccion" type="text" name="direccion"/>
+</div>
+
+<div id="consulta">
+<h1>Personas Inscritas</h1>
+<button id="agrBtn">Agregar</button>
+<button id="delBtn">Eliminar</button>
+<input type='text' id='q' autocomplete="off"/>
+<br/>
+<table id="resultados">
+<thead>
+<tr>
+<th class="ui-widget-header ui-corner-all ui-helper-clearfix"><input type="checkbox" id="checkAll"/></th>
+<th class="ui-widget-header ui-corner-all ui-helper-clearfix">Cédula</th>
+<th class="ui-widget-header ui-corner-all ui-helper-clearfix">Nombre</th>
+<th class="ui-widget-header ui-corner-all ui-helper-clearfix">Dirección</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</div>
+
+
+</body>
+</html>
