@@ -1,0 +1,109 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+	<title>Primera</title> 
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1"> 
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.css" />
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.1.0/jquery.mobile-1.1.0.min.js"></script>
+	<script type="text/javascript">
+	 function agregar() {
+	    var nombre=$("#nombre").val();
+	    $("#nombre").val('');
+	    var descripcion=$("#descripcion").val();
+	    $("#descripcion").val('');
+	    
+	    $("#lista").append(
+	        $("<li></li>").append(
+	          $("<a></a>").attr('href',"#"+nombre)
+	                      .text(nombre)
+	        )
+	    );
+	    
+	    var template=$("#audi").clone();
+	    template.attr('id',nombre);
+	    template.find("h1").text(nombre);
+	    template.find("p").text(descripcion);
+	    $("body").append(template);
+	    template.page();
+	    
+	    $("#lista").listview('refresh');
+	    $.mobile.changePage("#main");
+	 }
+	</script>
+</head> 
+<body> 
+
+<div id="main" data-role="page">
+
+	<div data-role="header">
+		<h1>Marcas Automoviles</h1>
+	</div>
+
+	<div data-role="content">	
+		<ul id="lista" data-role="listview" data-inset="true" data-filter="true">
+	        <li><a href="#acura">Acura</a></li>
+	        <li><a href="#audi">Audi</a></li>
+	        <li><a href="#cadillac">Cadillac</a></li>
+	        <li><a href="#ferrari">Ferrari</a></li>
+        </ul>
+	</div>
+	<div data-role="footer" class="ui-bar" data-position="fixed">
+	    <a href="#nuevo" data-role="button" data-icon="plus">Agregar</a>
+    </div>
+
+</div>
+
+<div id="acura" data-role="page" data-add-back-btn="true">
+	<div data-role="header"><h1>Acura</h1></div>
+	<div data-role="content">	
+		<p>Acura es una marca de Honda. Originaria de Japón. 
+		Muy popular en USA por su estilo deportivo y confiabilidad.</p>
+	</div>
+</div>
+
+<div id="audi" data-role="page" data-add-back-btn="true">
+	<div data-role="header"><h1>Audi</h1></div>
+	<div data-role="content">	
+		<p>Audi es una marca Alemana de gran trayectoria. Sus autos
+		   son rápidos con líneas deportivas y gran desempeño.</p>
+	</div>
+</div>
+
+<div id="cadillac" data-role="page" data-add-back-btn="true">
+	<div data-role="header"><h1>Cadillac</h1></div>
+	<div data-role="content">	
+		<p>Cadillac es una subsidiaria de General Motors USA.
+		   Famosa por producir vehículos lujosos, cómodos y
+		   silenciosos.</p>
+	</div>
+</div>
+
+<div id="ferrari" data-role="page" data-add-back-btn="true">
+	<div data-role="header"><h1>Ferrari</h1></div>
+	<div data-role="content">	
+		<p>Los autos deportivos más emblemáticos del mundo.
+		   Se fabrican en Modena Italia a mano. Ofrecen
+		   una experiencia de manejo sin igual. Son una marca
+		   muy popular y casi todo el mundo los puede reconocer
+		   al verlos.</p>
+		<p>La mayoría de sus modelos llevan el motor en la parte
+		   trasera y poseen avanzados sistemas de disminución de 
+		   emisiones de gases invernadero.</p>
+	</div>
+</div>
+
+<div id="nuevo" data-role="page" data-add-back-btn="true">
+	<div data-role="header"><h1>Nueva Marca</h1></div>
+	<div data-role="content">	
+		<label for="nombre">Nombre:</label>
+        <input type="text" name="nombre" id="nombre" value="" />
+        <label for="descripcion">Descripción:</label>
+        <textarea name="descripcion" id="descripcion"></textarea>
+        <button onclick="agregar()">Agregar</button>
+	</div>
+</div>
+
+</body>
+</html>
